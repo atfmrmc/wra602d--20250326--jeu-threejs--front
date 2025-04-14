@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 </script>
 
 <template>
-test
+  youpi caca
 </template>
 
 <style scoped>
