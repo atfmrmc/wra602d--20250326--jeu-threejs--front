@@ -8,15 +8,19 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "scss:build": "sass assets/scss:public/css",
-    "scss:watch": "sass --watch assets/scss:public/css"
+    "scss:build": "sass assets/style:assets/style",
+    "scss:watch": "sass --watch assets/style:assets/style"
   },
   "dependencies": {
     "lil-gui": "^0.20.0",
     "nuxt": "^3.16.1",
+    "sass": "^1.87.0",
     "scss": "^0.2.4",
     "three": "^0.174.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "prettier": "3.5.3"
   }
 }
