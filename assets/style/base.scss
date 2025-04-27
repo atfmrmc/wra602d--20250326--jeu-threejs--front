@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100vh;
+
+  margin: 0;
+  padding: 0;
+
+  background: #3f2b6c;
+  color: #fff;
+}
+
+#game-screen {
+  height: 5px;
+  width: 5px;
+
+  //background: #2e1b57;
+  background: red;
+}
