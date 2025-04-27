@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  youpi caca
+  <GameScreen/>
 </template>
 
 <style scoped>
