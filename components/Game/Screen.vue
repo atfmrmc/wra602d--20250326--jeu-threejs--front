@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-
+onMounted(() => {
+  initDiceBoard()
+})
 </script>
 
 <template>
