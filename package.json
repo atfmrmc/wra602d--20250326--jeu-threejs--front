@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@vesp/nuxt-fontawesome": "^1.2.1",
+    "gsap": "^3.13.0",
     "lil-gui": "^0.20.0",
     "nuxt": "^3.16.1",
     "sass": "^1.87.0",
