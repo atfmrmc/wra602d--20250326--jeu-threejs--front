@@ -1,56 +1,29 @@
+import {Vector3} from 'three';
+
 export function initGame() {
     onMounted(() => {
-        console.log("initGame")
+        // Initialize the game engine
+        const gameEngine = new GameEngine('game-screen');
+        console.log(gameEngine);
 
+        // Load necessary models
+        gameEngine.loader.loadGLTF('dice', '/models/dice.glb');
 
-        // Scene
-        const sceneManager = new SceneManager()
-        setSceneManager(sceneManager)
-        const scene = sceneManager.getScene()
+        gameEngine.loader.onReady = () => {
+            new Dice(new Vector3(0, 1, 0), gameEngine);
+        };
 
-        // Renderer
-        const rendererManager = new RendererManager()
-        setRendererManager(rendererManager)
-        const renderer = rendererManager.getRenderer()
+        engine.start();
 
-        // Canvas
-        const canvas = rendererManager.getCanvas()
-
-        // Camera
-        const cameraManager = new CamaraManager(canvas)
-        setCameraManager(cameraManager)
-        const camera = cameraManager.getCamera();
-
-        const ambMgr = new AmbientLightManager(scene)
-        setAmbientLightManager(ambMgr)
-
-        const dirMgr = new DirectionalLightManager(scene)
-        setDirectionalLightManager(dirMgr)
-
-        const diceBoard = new DiceBoard(scene);
-        diceBoard.onLoad();
-
-        diceBoard.setResults([2, 6, 3], [1, 4, 5]);
-
-        
-        // Animation
-        let lastTime: number = 0;
-
-        function animate(timestamp: number) {
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-
-            const currentPlayerRolls = [6, 2, 3];
-            const currentAiRolls = [6, 2, 3];
-
-            // tween the dice toward those faces
-            diceBoard.animate(timestamp, deltaTime, currentPlayerRolls, currentAiRolls);
-
-            renderer.render(scene, camera);
-
-            requestAnimationFrame(animate)
+        // Animation Engine
+        /*
+        function animate() {
+            requestAnimationFrame(animate);
+            gameEngine.updater.processFrameUpdates();
+            gameEngine.renderer.render(gameEngine.scene, gameEngine.camera);
         }
 
-        animate()
+        animate();
+        */
     });
 }

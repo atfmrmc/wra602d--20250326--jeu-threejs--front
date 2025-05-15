@@ -1,6 +1,5 @@
 // src/game/feature/dice/DiceBoard.ts
 import {Scene, Vector3} from 'three';
-import {DiceGroup} from './DiceGroup';
 
 export class DiceBoard {
     private playerGroup: DiceGroup;

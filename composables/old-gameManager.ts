@@ -1,9 +1,9 @@
 let sceneManager: SceneManager;
-let cameraManager: CamaraManager;
+let cameraManager: CameraManager;
 let rendererManager: RendererManager;
 let ambientLightManager: AmbientLightManager;
 let directionalLightManager: DirectionalLightManager;
-let canvasManager: CanvasManager;
+let updatesManager: UpdatesManager;
 
 // Scene
 const setSceneManager = (sceneManagerInstance: SceneManager) => {
@@ -15,7 +15,7 @@ const getSceneManager = () => {
 }
 
 // Camera
-const setCameraManager = (cameraManagerInstance: CamaraManager) => {
+const setCameraManager = (cameraManagerInstance: CameraManager) => {
     cameraManager = cameraManagerInstance;
 }
 
@@ -51,6 +51,16 @@ const getDirectionalLightManager = () => {
     return directionalLightManager;
 }
 
+// Updates Manager
+const setUpdatesManager = (updatesManagerInstance: UpdatesManager) => {
+    updatesManager = updatesManagerInstance;
+}
+
+const getUpdatesManager = () => {
+    return updatesManager;
+}
+
+
 // Exports
 export {
     setSceneManager,
@@ -62,5 +72,7 @@ export {
     setAmbientLightManager,
     getAmbientLightManager,
     setDirectionalLightManager,
-    getDirectionalLightManager
+    getDirectionalLightManager,
+    setUpdatesManager,
+    getUpdatesManager
 }
