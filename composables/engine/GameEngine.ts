@@ -62,12 +62,12 @@ export class GameEngine {
         this.camera.updateProjectionMatrix();
     }
 
-    public addObject(obj: Object3D): void {
+    public addObject(obj: GameObject): void {
         this.scene.add(obj.mesh);
         this.updater.addAnimatableObject(obj);
     }
 
-    public removeObject(obj: Object3D): void {
+    public removeObject(obj: GameObject) {
         this.scene.remove(obj.mesh);
         this.updater.removeAnimatableObject(obj);
     }

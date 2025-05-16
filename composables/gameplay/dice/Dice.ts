@@ -1,4 +1,4 @@
-import {Object3D, Vector3} from 'three';
+import {Group, Object3D, Vector3} from 'three';
 import {defaultDiceOptions} from '../../utils/DiceOptions';
 import {gameEngine} from './../../engine/GameEngine';
 import {gsap} from 'gsap';
@@ -9,7 +9,6 @@ export class Dice implements GameObject {
     public rotationOrigin: Vector3 = new Vector3(0, 0, 0);
     public rotationOffset: Vector3 = new Vector3(0, 0, 0);
     public mesh: Object3D;
-
     /**
      * This arrays contains the dice faces.
      * And the rotation of the dice that is used to display the face.
@@ -31,16 +30,21 @@ export class Dice implements GameObject {
         public starterPosition: Vector3 = new Vector3(),
     ) {
         // Load the model and set its scale
-        this.mesh = gameEngine.loader.getModel('dice');
-        this.mesh.scale.set(defaultDiceOptions.size, defaultDiceOptions.size, defaultDiceOptions.size);
+        const original = gameEngine.loader.getModel('dice') as Group
 
+        this.mesh = original.clone(true) as Group
+
+        this.mesh.scale.set(
+            defaultDiceOptions.size,
+            defaultDiceOptions.size,
+            defaultDiceOptions.size
+        )
         this.mesh.traverse((child) => {
             if ((child as Mesh).isMesh) {
                 (child as Mesh).castShadow = true;
                 (child as Mesh).receiveShadow = true;
             }
         });
-
         // Set the initial position and rotation of the die
         this.positionOrigin.copy(starterPosition);
         this.mesh.position.copy(this.positionOrigin);
@@ -107,6 +111,14 @@ export class Dice implements GameObject {
     }
 
     /**
+     * Sets the dice to a random face.
+     */
+    public roll() {
+        const randomFace = Math.floor(Math.random() * 6) + 1;
+        this.setFace(randomFace);
+    }
+
+    /**
      * Sets the face of the dice to the specified value.
      * @param face
      */
@@ -128,6 +140,7 @@ export class Dice implements GameObject {
         });
     }
 
+
     /**
      * Updates the position and rotation of the dice each frame.
      * @param elapsedTime
@@ -144,6 +157,5 @@ export class Dice implements GameObject {
             this.rotationOrigin.y + this.rotationOffset.y,
             this.rotationOrigin.z + this.rotationOffset.z
         );
-
     }
 }

@@ -1,4 +1,4 @@
 export interface GameConfig {
-    computer: PlayerConfig;
     human: PlayerConfig;
+    computer: PlayerConfig;
 }

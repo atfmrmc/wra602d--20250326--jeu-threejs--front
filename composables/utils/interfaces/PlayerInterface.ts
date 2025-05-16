@@ -1,5 +1,8 @@
 export interface PlayerConfig {
-    diceCount: number;
     name: string;
+    diceCount: number;
+    minCount: number;
+    maxCount: number;
     offset: number;
+    getScore: number;
 }

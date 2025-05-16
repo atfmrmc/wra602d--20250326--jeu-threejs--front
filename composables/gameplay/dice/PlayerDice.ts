@@ -23,9 +23,14 @@ export class Player {
         }
     }
 
-    addDice(index: number) {
+    addDice() {
+        if (this.playersDice.length >= defaultDiceOptions.maxCount) {
+            return;
+        }
         const d = new Dice();
         this.playersDice.push(d);
+
+        gsap.killTweensOf(d.mesh.scale)
 
         // Add the dice to the scene
         gsap.to(d.mesh.scale, {
@@ -43,11 +48,16 @@ export class Player {
     }
 
     removeDice() {
-        if (this.playersDice.length === 0) {
-            return;
-        }
+        if (!this.playersDice.length) return
+        const d = this.playersDice.pop()!
+        // 1) Stop the floating loop on positionOffset:
+        gsap.killTweensOf(d.positionOffset)
 
-        const d = this.playersDice.pop();
+        // 2) Stop all wobble loops on rotationOffset:
+        gsap.killTweensOf(d.rotationOffset)
+
+        // 3) Stop any in-flight scale tweens:
+        gsap.killTweensOf(d.mesh.scale)
 
         gsap.to(d.mesh.scale, {
             x: 0,
@@ -57,12 +67,11 @@ export class Player {
             ease: 'elastic.out(1, .5)',
             onComplete: () => {
                 gameEngine.removeObject(d);
+                this.playersDiceCount = this.playersDice.length
+
+                this.calculateDicePositionCompensation()
             }
         });
-
-        this.calculateDicePositionCompensation()
-
-        this.playersDiceCount = this.playersDice.length;
     }
 
     calculateDicePositionCompensation() {
@@ -80,17 +89,23 @@ export class Player {
         }
     }
 
-    getScore() {
+    public rollDice() {
+        for (let i = 0; i < this.playersDice.length; i++) {
+            const d = this.playersDice[i];
+            d.roll();
+        }
+        return this.getTotalScore()
+    }
+
+    public getTotalScore() {
         let newScore = 0;
         for (let i = 0; i < this.playersDice.length; i++) {
             const d = this.playersDice[i];
             newScore += d.currentFace;
         }
         this.playersCurrentScore = newScore;
+        return this.playersCurrentScore;
     }
 }
 
-export function addPlayerDice(index: number, playerName: string, diceAnchor: number) {
-    const d = new PlayerDice(index, playerName, diceAnchor);
-    return d;
-}
+export default Player;
