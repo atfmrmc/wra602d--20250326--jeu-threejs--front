@@ -9,7 +9,6 @@ export class UpdatesManager {
         this.clock = new Clock();
     }
 
-
     /**
      * Adds a GameObject to the list of objects to be updated each frame.
      * @param object The GameObject to add.

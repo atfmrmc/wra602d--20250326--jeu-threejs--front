@@ -2,11 +2,12 @@ import {DirectionalLight, Light, Scene} from "three";
 
 export class DirectionalLightManager implements GlobalObject<Light> {
     public directionalLightIntensity = 1;
-    protected directionalLight: Light;
+    protected directionalLight: DirectionalLight;
 
     constructor(scene: Scene, intensity: number,) {
         this.directionalLightIntensity = intensity;
         this.directionalLight = this.instantiate();
+        scene.add(this.directionalLight);
         this.settings();
     }
 

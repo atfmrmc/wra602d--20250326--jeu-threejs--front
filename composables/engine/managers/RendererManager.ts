@@ -3,7 +3,7 @@ import {PCFSoftShadowMap, WebGLRenderer} from 'three';
 export class RendererManager implements GlobalObject<WebGLRenderer> {
     protected renderer: WebGLRenderer;
 
-    constructor(displayElement: HTMLCanvasElement | null) {
+    constructor(displayElement: HTMLCanvasElement | null, displaySize: { w: number; h: number }) {
         if (displayElement) {
             this.instantiate(displayElement)
             this.settings(displayElement);
@@ -18,8 +18,8 @@ export class RendererManager implements GlobalObject<WebGLRenderer> {
         });
     }
 
-    settings(displayElement: HTMLCanvasElement | null): void {
-        this.renderer.setSize(displayElement.innerWidth, displayElement.innerHeight);
+    settings(displaySize: { w: number; h: number }): void {
+        this.renderer.setSize(displaySize.w, displaySize.h);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         this.renderer.shadowMap.enabled = true;
@@ -28,9 +28,5 @@ export class RendererManager implements GlobalObject<WebGLRenderer> {
 
     getRenderer(): WebGLRenderer {
         return this.renderer;
-    }
-
-    setSize(width: number, height: number): void {
-        this.renderer().setSize(width, height);
     }
 }

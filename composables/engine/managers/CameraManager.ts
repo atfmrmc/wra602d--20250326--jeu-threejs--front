@@ -1,15 +1,15 @@
-import {PerspectiveCamera} from "three";
+import {PerspectiveCamera} from 'three';
 
 export class CameraManager implements GlobalObject<Camera> {
     protected camera: Camera;
 
-    constructor(displayElement: HTMLCanvasElement) {
-        this.camera = this.instantiate(displayElement);
+    constructor(displaySize: { w: number; h: number }) {
+        this.camera = this.instantiate(displaySize);
         this.settings();
     }
 
-    instantiate(displayElement: HTMLCanvasElement): Camera {
-        return new PerspectiveCamera(75, displayElement.clientWidth / displayElement.clientHeight, 0.1, 1000);
+    instantiate(displaySize: { w: number; h: number }): Camera {
+        return new PerspectiveCamera(75, displaySize.w / displaySize.h, 0.1, 1000);
     }
 
     settings(): void {
@@ -19,6 +19,11 @@ export class CameraManager implements GlobalObject<Camera> {
 
     getCamera() {
         return this.camera;
+    }
+
+    setSize(displaySize: { w: number; h: number }): void {
+        this.camera.aspect = displaySize.w / displaySize.h;
+        this.camera.updateProjectionMatrix();
     }
 }
 

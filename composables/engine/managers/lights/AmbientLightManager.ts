@@ -4,9 +4,10 @@ export class AmbientLightManager implements GlobalObject<Light> {
     public ambientLightIntensity = 1;
     protected ambientLight: AmbientLight;
 
-    constructor(intensity: number) {
+    constructor(scene: Scene, intensity: number) {
         this.ambientLightIntensity = intensity;
         this.ambientLight = this.instantiate();
+        scene.add(this.ambientLight);
         this.settings();
     }
 
