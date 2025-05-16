@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #2e1b57;
+    color: #fff;
+}
+
+#game-screen {
+    height: calc(100vh - 5vw);
+    width: 95vw;
+    background: #3f2b6c;
+    border-radius: 16px;
+}
+
+/*# sourceMappingURL=base.css.map */
