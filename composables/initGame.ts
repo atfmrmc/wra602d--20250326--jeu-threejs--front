@@ -1,29 +1,19 @@
-import {Vector3} from 'three';
+import {gameEngine} from './engine/GameEngine';
 
-export function initGame() {
+export function initGame(config: GameConfig) {
     onMounted(() => {
-        // Initialize the game engine
-        const gameEngine = new GameEngine('game-screen');
-        console.log(gameEngine);
-
-        // Load necessary models
-        gameEngine.loader.loadGLTF('dice', '/models/dice.glb');
-
+        gameEngine.instantiate();
         gameEngine.loader.onReady = () => {
-            new Dice(new Vector3(0, 1, 0), gameEngine);
-        };
-
-        engine.start();
-
-        // Animation Engine
-        /*
-        function animate() {
-            requestAnimationFrame(animate);
-            gameEngine.updater.processFrameUpdates();
-            gameEngine.renderer.render(gameEngine.scene, gameEngine.camera);
+            const playerComputer = new Player(
+                config.computer.diceCount,
+                config.computer.name,
+                config.computer.offset
+            )
+            const playerHuman = new Player(
+                config.human.diceCount,
+                config.human.name,
+                config.human.offset
+            )
         }
-
-        animate();
-        */
     });
 }

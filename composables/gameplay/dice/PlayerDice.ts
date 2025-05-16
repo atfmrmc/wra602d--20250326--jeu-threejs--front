@@ -1,64 +1,96 @@
 import {Dice} from './Dice';
+import {defaultDiceOptions} from "~/composables/utils/DiceOptions";
+import {gsap} from 'gsap';
 
-export class PlayerDice {
-    private dice: Dice[] = [];
+export class Player {
+    public playerName: string;
 
-    /**
-     * @param initialCount  how many to start with
-     * @param startPositions optional positions to lay them out
-     */
-    constructor(
-        initialCount: number = 0,
-        private startPositions: Vector3[] = []
-    ) {
-        // spawn any starting dice
-        for (let i = 0; i < initialCount; i++) {
-            this.addDice(this.startPositions[i] || new Vector3(i * 2, 1, 0));
+    public playersDice: Dice[] = [];
+    public playersDiceCount: number = 0;
+    private playersCurrentScore: number;
+
+    private diceAnchor: Vector3;
+    private dicePositionCompensation: number = 0;
+
+    constructor(numberOfDice: number, playerName: string, diceAnchor: number) {
+        this.playerName = playerName;
+        this.diceAnchor = diceAnchor;
+
+        for (let i = 0; i < numberOfDice; i++) {
+            setTimeout(() => {
+                this.addDice(i);
+            }, 300 * i);
         }
     }
 
-    /** number of dice the player currently has */
-    public getCount(): number {
-        return this.dice.length;
-    }
+    addDice(index: number) {
+        const d = new Dice();
+        this.playersDice.push(d);
 
-    /**
-     * Spawns a new dice at the given world position.
-     * Returns the Dice instance in case you want to animate it.
-     */
-    public addDice(position: Vector3 = new Vector3(0, 1, 0)): Dice {
-        const dice = new Dice(position);
-        this.dice.push(dice);
-        return dice;
-    }
-
-    /**
-     * Removes the most recently added dice from the scene.
-     * Returns it in case you need to do cleanup/animation.
-     */
-    public removeDice(): Dice | undefined {
-        const dice = this.dice.pop();
-        if (dice) this.scene.remove(dice.mesh);
-        return dice;
-    }
-
-    /**
-     * Take the array of face-results from your API (e.g. [3,1,6])
-     * and orient each spawned Dice accordingly.
-     */
-    public setResults(results: number[]): void {
-        if (results.length !== this.dice.length) {
-            throw new Error(
-                `PlayerDice.setResults: expected ${this.dice.length} values, got ${results.length}`
-            );
-        }
-        results.forEach((value, i) => {
-            this.dice[i].setValue(value);
+        // Add the dice to the scene
+        gsap.to(d.mesh.scale, {
+            startAt: {x: 0, y: 0, z: 0},
+            x: defaultDiceOptions.size,
+            y: defaultDiceOptions.size,
+            z: defaultDiceOptions.size,
+            duration: 2,
+            ease: 'elastic.out(1, .5)',
         });
+
+        this.calculateDicePositionCompensation()
+
+        this.playersDiceCount = this.playersDice.length;
     }
 
-    /** (Optional) get the raw Dice instances, e.g. to wire into your UpdatesManager */
-    public getDice(): Dice[] {
-        return [...this.dice];
+    removeDice() {
+        if (this.playersDice.length === 0) {
+            return;
+        }
+
+        const d = this.playersDice.pop();
+
+        gsap.to(d.mesh.scale, {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: 0.5,
+            ease: 'elastic.out(1, .5)',
+            onComplete: () => {
+                gameEngine.removeObject(d);
+            }
+        });
+
+        this.calculateDicePositionCompensation()
+
+        this.playersDiceCount = this.playersDice.length;
     }
+
+    calculateDicePositionCompensation() {
+        const count = this.playersDice.length;
+
+        if (count <= 1) {
+            this.dicePositionCompensation = 0;
+        }
+
+        const halfSpan = (count - 1) / 2 * defaultDiceOptions.spacing;
+
+        for (let i = 0; i < count; i++) {
+            const x = (i * defaultDiceOptions.spacing) - halfSpan;
+            this.playersDice[i].moveTo({x, y: this.diceAnchor, z: 0});
+        }
+    }
+
+    getScore() {
+        let newScore = 0;
+        for (let i = 0; i < this.playersDice.length; i++) {
+            const d = this.playersDice[i];
+            newScore += d.currentFace;
+        }
+        this.playersCurrentScore = newScore;
+    }
+}
+
+export function addPlayerDice(index: number, playerName: string, diceAnchor: number) {
+    const d = new PlayerDice(index, playerName, diceAnchor);
+    return d;
 }
